@@ -1,0 +1,107 @@
+[tool]
+[tool.black]
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | migrations
+)/
+'''
+include = '\.pyi?$'
+line-length = 120
+target-version = ['py37']
+
+[tool.poetry]
+authors = ["confbot <info@confbot.com>"]
+description = "Backend for confbot"
+name = "confbot"
+version = "0.0.0"
+
+[tool.poetry.dependencies]
+python = "3.8.6"
+pytz="2021.1"
+python-slugify="4.0.1"
+Pillow="8.1.0"
+rcssmin="1.0.6"
+argon2-cffi="20.1.0"
+whitenoise="5.2.0"
+redis="3.5.3"
+hiredis="1.1.0"
+celery="4.4.6"
+django-celery-beat="2.2.0"
+flower="0.9.7"
+uvicorn="0.13.3"
+django="3.0.11"
+django-environ="0.4.5"
+django-model-utils="4.1.1"
+django-allauth="0.44.0"
+django-crispy-forms="1.11.0"
+django-compressor="2.4"
+django-redis="4.12.1"
+# Django REST Framework
+djangorestframework="3.12.2"
+django-cors-headers="3.7.0"
+drf-nested-routers = "^0.93.3"
+gunicorn = "20.0.4"
+sentry-sdk = "0.19.5"
+psycopg2 = "2.8.6"
+django-anymail = "8.2"
+httptools = "^0.1.1"
+uvloop = "^0.15.2"
+django-filter = "^2.4.0"
+python-telegram-bot = "^13.5"
+emoji = "^1.2.0"
+
+[tool.poetry.dev-dependencies]
+Werkzeug="1.0.1"
+ipdb="0.13.4"
+watchgod="0.6"
+
+# Testing
+# ------------------------------------------------------------------------------
+mypy="0.800"
+django-stubs="1.7.0"
+pytest="6.2.2"
+pytest-sugar="0.9.4"
+
+# Documentation
+# ------------------------------------------------------------------------------
+sphinx="3.4.3"
+sphinx-autobuild="2020.9.1"
+
+# Code quality
+# ------------------------------------------------------------------------------
+flake8="3.8.4"
+flake8-isort="4.0.0"
+coverage="5.4"
+black="20.8b1"
+pylint-django="2.4.2"
+pylint-celery="0.3"
+pre-commit="2.10.0"
+
+# Django
+# ------------------------------------------------------------------------------
+factory-boy="3.2.0"
+
+django-debug-toolbar="3.2"
+django-extensions="3.1.0"
+django-coverage-plugin="1.8.0"
+pytest-django="4.1.0"
+
+
+django-picklefield = "<3.0.0"
+freezegun = "*"
+mock = "*"
+nplusone = "*"
+pympler = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-xdist = "*"
+requests-mock = "*"

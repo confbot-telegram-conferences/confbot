@@ -1,0 +1,13 @@
+{% extends 'admin/change_form.html' %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block object-tools-items %}
+{% if change %}{% if not is_popup %}
+<li>
+    <a href="{% url 'admin:conference_userconference_changelist' %}?conference__id={{ original.id }}">
+        {% trans "User viewed" %}
+    </a>
+</li>
+{% endif %}{% endif %}
+{{ block.super }}
+{% endblock %}

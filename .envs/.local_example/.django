@@ -1,0 +1,24 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+
+# Celery
+# ------------------------------------------------------------------------------
+
+# Flower
+CELERY_FLOWER_USER=debug
+CELERY_FLOWER_PASSWORD=debug
+
+DATABASE_URL=postgres://debug:debug@postgres/confbot
+CELERY_BROKER_URL=redis://redis:6379/0
+
+BOT_SECRET_KEY=
+BOT_HOST=http://app:5000
+
+TELEGRAM_TOKEN=
+GROUP_UPLOAD_FILES=
+APP_ENVIRONMENT=local

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+source /app/.venv/bin/activate
+
+
+python /app/manage.py collectstatic --noinput
+python /app/manage.py migrate
+python manage.py compilemessages
+
+compress_enabled() {
+python << END
+import sys
+
+from environ import Env
+
+env = Env(COMPRESS_ENABLED=(bool, True))
+if env('COMPRESS_ENABLED'):
+    sys.exit(0)
+else:
+    sys.exit(1)
+
+END
+}
+
+if compress_enabled; then
+  # NOTE this command will fail if django-compressor is disabled
+  python /app/manage.py compress
+fi
+
+# Prepare log files and start outputting logs to stdout
+mkdir -p ./logs
+touch ./logs/gunicorn.log
+touch ./logs/gunicorn-access.log
+tail -n 0 -f ./logs/gunicorn*.log &
+
+gunicorn config.asgi --bind 0.0.0.0:5000 --chdir=/app -k uvicorn.workers.UvicornWorker --log-level=info --log-file=./logs/gunicorn.log --access-logfile=./logs/gunicorn-access.log
+

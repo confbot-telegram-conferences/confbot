@@ -1,0 +1,78 @@
+version: '3'
+
+volumes:
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+  production_traefik: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: confbot_production_django
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    ports:
+      - "0.0.0.0:8000:5000"
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: confbot_production_postgres
+    volumes:
+      - production_postgres_data:/var/lib/postgresql/data:Z
+      - production_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.production/.postgres
+
+  traefik:
+    build:
+      context: .
+      dockerfile: ./compose/production/traefik/Dockerfile
+    image: confbot_production_traefik
+    depends_on:
+      - django
+      - flower
+    volumes:
+      - production_traefik:/etc/traefik/acme:z
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+      - "0.0.0.0:5555:5555"
+
+  redis:
+    image: redis:alpine
+
+  celeryworker:
+    <<: *django
+    image: confbot_production_celeryworker
+    command: /start-celeryworker
+    depends_on:
+      - django
+    ports:
+      - '8944:5000'
+
+  celerybeat:
+    <<: *django
+    image: confbot_production_celerybeat
+    command: /start-celerybeat
+    depends_on:
+      - django
+    ports:
+      - '8945:5000'
+
+  flower:
+    <<: *django
+    image: confbot_production_flower
+    command: /start-flower
+    depends_on:
+      - django
+    ports:
+      - "0.0.0.0:9000:5555"
